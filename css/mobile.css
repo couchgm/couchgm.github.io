@@ -139,7 +139,7 @@
 		display: block;
 	}
 	#header div ul#navigation li.selected > a {
-		background: rgba(204, 60, 104, 0.91);
+		background: rgba(82, 165, 216, 0.91);
 		color: #f8f8f8;
 	}
 	#body {
