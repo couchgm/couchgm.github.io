@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang='en'>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>How the CouchGM Predictors Work</title>
+	<meta name="description" content="A description of how the CouchGM's NBA, NFL, NCAA, and WNBA predictive models work.">
+	<link rel="stylesheet" href="/static/css/style.css" type="text/css">
+	<link rel="stylesheet" type="text/css" href="/static/css/mobile.css">
+	<script src="/static/js/mobile.js" type="text/javascript"></script>
+	<style> table, th, td {border: 1px solid black; text-align:center; font-size: 15px; margin-left:auto; margin-right:auto} </style>
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-WH58Q8FZ1Y"></script>
+	<script>
+  	window.dataLayer = window.dataLayer || [];
+  	function gtag(){dataLayer.push(arguments);}
+  	gtag('js', new Date());
+
+  	gtag('config', 'G-WH58Q8FZ1Y');
+	</script>
+	<!-- Google Adsense script -->
+	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4821210529883039"
+     crossorigin="anonymous"></script>
+</head>
+<body>
+	<div id="page">
+		<div id="header">
+			<div>
+				<a href="/index.html" class="logo"><img src="/static/images/Blue-Grey-Orange.png" height="50" alt="logo"></a>
+				<ul id="navigation">
+					<li class="menu">
+						<a href="/about/index.html">About</a>
+					</li>
+					<li class="menu">
+						<a href="/blog/index.html">Blog</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div id="body">
+			<div class="header">
+				<div>
+					<h1>Predictors</h1>
+				</div>
+			</div>
+			<div class="singlepost">
+				<div class="featured">
+					<img style="margin-left: auto; margin-right:auto" src="/static/images/laptop.png" alt="Laptop Icon" height="350">
+					<h1>How it Works</h1>
+					<span>By Zach Hales, CouchGM</span>
+					<p>All of our championship predictors work in basically the same way, which is described in general below.</p>
+					<p>My philosophy was simple: find out what a championship-winning team looks like statistically, or in other words, identify the statistical criteria required for winning a championship, and then develop a system to rate each team in the league against those criteria. My goal is to determine which team most closely resembles a championship winner with simple calculations that could be done easily in excel.</p>
+					<p>Given that objective, let’s take as an example the NBA predictor. I needed to identify the stats that would inform the model. I started with offensive and defensive ratings (estimates of points scored and points allowed per 100 possessions, respectively) and net rating (net points per 100 possessions). Offensive and defensive ratings have become popular in the NBA because they put all teams on a level playing field and tell which offenses or defenses are most efficient. Points per game could be inflated by playing faster (play fast = more possessions = more opportunities to score) or deflated by playing slower. The same idea could be applied to football, where a team that leans more heavily to running plays might have more time-consuming drives and therefore fewer drives in a game. So we use offensive or defensive efficiency ratings rather than raw points scored or allowed per game.</p>
+					<p>Another consideration was that the league changes over time. For example, in the 2010-2011 season, the Denver Nuggets had the best offense in the league with an offensive rating of 112.7, and the league-average offensive rating was 107.4, per Cleaning The Glass. In the 2020-2021 season, that 112.7 offensive rating would have only ranked 14th and the league-average was 112.9. So rather than use the actual ratings, we use the league-wide rank. Relative ratings are more important than exact ratings.</p>
+					<p>So to identify the criteria required to win a championship, I looked at the league-wide ranking in offensive, defensive, and net ratings for the last few teams that actually won. For example, looking at the last 5 NBA Champions in terms of offensive rating, and calculating the average, you get this table below.</p>
+					<table>
+						<tr>
+							<th>Year</th>
+							<th>Team</th>
+							<th>Offensive Rating Rank</th>
+						</tr>
+						<tr>
+							<td>2021</td>
+							<td>Milwaukee Bucks</td>
+							<td>7</td>
+						</tr>
+						<tr>
+							<td>2020</td>
+							<td>Los Angeles Lakers</td>
+							<td>11</td>
+						</tr>
+						<tr>
+							<td>2019</td>
+							<td>Toronto Raptors</td>
+							<td>6</td>
+						</tr>
+						<tr>
+							<td>2018</td>
+							<td>Golden State Warriors</td>
+							<td>2</td>
+						</tr>
+						<tr>
+							<td>2017</td>
+							<td>Golden State Warriors</td>
+							<td>1</td>
+						</tr>
+						<tr>
+							<td colspan="2">Average</td>
+							<td>5.4</td>
+						</tr>
+					</table>
+					<div></div>
+					<p>So over the last 5 years, the average NBA champion had an offensive rating rank of 5.4, so you could say that your criteria for winning a championship is a top-5 offense. You could carry out that same activity for each stat you want to include. And that’s exactly what I did! I chose a handful of stats and calculated the average of the last few champions’s rankings in those stats. If the average ranking was high (like top-10 or better), I would consider using that stat in the model. If it was low (lower than top-10), I would not consider including it in the model because it’s unlikely to actually be important.</p>
+					<p>For the NBA model, knowing that three-point shooting is highly valued in the NBA today, I needed to find a three-point shooting stat to include. I originally used 3FG% and made threes but found that using both of those favored offense more heavily than I was comfortable with, so I settled on eFG% (1.5 * made three-point shots + made two-point shots / total shots attempted) and eFG% allowed (same thing but for defense).</p>
+					<p>So I established a criteria for offensive rating, defensive rating, net rating, eFG% and defensive eFG%. Then categories that have a stricter criteria are weighted more heavily (i.e., if the criteria for a category is a top-3 ranking, that category has more points than a category with a criteria of a top-6 ranking). Teams are scored in each category and the sum of the scores in every category is a team’s overall “Championship Score.” Championship probabilities are based on these Championship Scores.</p>
+					<p>After developing the rating system, I also wanted the ability to predict a team’s record. So I charted each team’s end-of-season Championship Score against their actual winning percentage and, for the 2020-2021 NBA season as an example below, fit the data to an equation.</p>
+					<img style="margin-left: auto; margin-right:auto" src="/static/images/predictors/cs-vs-win-percent.png" alt="Championship Score vs Winning Percentage with 95% confidence interval" height="300" loading="lazy">
+					<div></div>
+					<p>Now there’s a simple method for rating each team and predicting their winning percentage from just simple calculations in excel, no simulation or programming required.</p>
+					<p>Data for every season beginning in 2012 inform the overall record prediction models, with data from each additional season added when available. Beginning in 2023, a rolling 10-year window will be used.</p>
+					<p>The same approach was applied to the MLB World Series, NFL Super Bowl, WNBA Finals, and March Madness / NCAA Men’s Basketball Tournament. Each model is informed by an offensive, defensive, and net “efficiency” (defined in sport-specific ways) and two additional sport-specific stats. In the future we’d like to do the same for NCAA Women’s Basketball, NCAA Football, and possibly more. These are in various stages of development and data acquisition.</p>
+					<a href="/blog/index.html" class="load">back to blog</a>
+				</div>
+				<div class="sidebar">
+					<h1>Championship Predictors</h1>
+					<img src="https://pbs.twimg.com/profile_images/867760452/nba_trophy_white_400x400.jpg" alt="Larry O'Brien Trophy" height="175" loading="lazy">
+					<h2>NBA Championship Predictor</h2>
+					<span>By  Zach Hales, CouchGM</span>
+					<p>CouchGM's NBA Championship Predictor is now presented in this live table.</p>
+					<a href="/predictors/nba/index.html" class="more">Read More</a>
+					<div></div>
+					<img src="https://about.att.com/ecms/dam/pages/MarchMadness/InkedTrophy%20Case_LI.jpg" alt="NCAA Men's Basketball Championship Trophy" height="175" loading="lazy">
+					<h2>NCAA Men's Basketball Championship Predictor</h2>
+					<span>By  Zach Hales, CouchGM</span>
+					<p>CouchGM's NCAA Men's Basketball Championship Predictor is now presented in this live table.</p>
+					<a href="/predictors/ncaa/mbb/index.html" class="more">Read More</a>
+					<div></div>
+					<img src="https://amhsnewspaper.com/wp-content/uploads/2016/11/NCAA-Basketball-900x871.png" alt="" height="175" loading="lazy">
+					<h2>NCAA Men's Basketball Top-25</h2>
+					<span>By  Zach Hales, CouchGM</span>
+					<p>CouchGM's NCAA Men's Basketball Top-25 is now presented in this live table.</p>
+					<a href="/predictors/ncaa/mbb/top-25.html" class="more">Read More</a>
+					<div></div>
+					<img src="http://blog.gospikes.com/wp-content/uploads/2015/02/Lombardi_Trophy.jpg" alt="Lombardi Trophy" height="175" loading="lazy">
+					<h2>Super Bowl Predictor</h2>
+					<span>By  Zach Hales, CouchGM</span>
+					<p>CouchGM's Super Bowl Predictor is now presented in this live table.</p>
+					<a href="/predictors/nfl/index.html" class="more">Read More</a>
+					<div></div>
+					<img src="https://scontent-sjc3-1.xx.fbcdn.net/v/t1.6435-9/72915901_10156979268978068_8198650229382184960_n.jpg?_nc_cat=107&ccb=1-5&_nc_sid=9267fe&_nc_ohc=5yxGi1IFtHYAX-5oALY&_nc_ht=scontent-sjc3-1.xx&oh=00_AT9oHw200SqxA0ytgyleb9pcSwgNkPsDwjERS7FMKi0UOQ&oe=620F7C2E" alt="WNBA Finals Trophy" height="175" loading="lazy">
+					<h2>WNBA Championship Predictor</h2>
+					<span>By  Zach Hales, CouchGM</span>
+					<p>CouchGM's WNBA Championship Predictor is now presented in this live table.</p>
+					<a href="/predictors/wnba/index.html" class="more">Read More</a>
+					<div></div>
+					<img src="https://www.pngitem.com/pimgs/m/419-4192760_world-series-trophy-vector-hd-png-download.png" alt="World Series Trophy" height="175" loading="lazy">
+					<h2>World Series Predictor</h2>
+					<span>By  Zach Hales, CouchGM</span>
+					<p>CouchGM's World Series Predictor is now presented in this live table.</p>
+					<a href="/predictors/mlb/index.html" class="more">Read More</a>
+				</div>
+			</div>
+		</div>
+		<div id="footer">
+			<div>
+				<div class="connect">
+					<a href="https://www.facebook.com/CouchGMSports/" class="facebook">facebook</a>
+					<a href="https://www.twitter.com/CouchGMSports/" class="twitter">twitter</a>
+					<a href="https://www.instagram.com/CouchGMSports/" class="instagram">instagram</a>
+					<a href="https://www.youtube.com/channel/UCJYZrHntOq1IRqXNaLiTSRw?view_as=subscriber" class="youtube">youtube</a>
+				</div>
+				<p>&copy; 2020-2022 CouchGM. All Rights Reserved.</p>
+				<p><a href="/contact/index.html">Contact Us</a></p>
+				<p><a href="/privacy/index.html">Privacy Policy</a></p>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
