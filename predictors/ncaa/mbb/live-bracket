@@ -4,7 +4,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>NCAA Men's Basketball Live Tournament Bracket</title>
-	<meta name="description" content="NCAA Tournament Live Bracket, with odds for every game as predicted by the CouchGM NCAA Mens' Basketball Predictor.">
+	<meta name="description" content="Live Tournament Bracket for the NCAA Men's Basketball Championship, with probabilities for every game as calculated by the CouchGM NCAA Men's Basketball Championship Predictor.">
 	<link rel="stylesheet" href="/static/css/style.css" type="text/css">
 	<link rel="stylesheet" type="text/css" href="/static/css/mobile.css">
 	<script src="/static/js/mobile.js" type="text/javascript"></script>
@@ -39,7 +39,7 @@
 		<div id="body">
 			<div class="header">
 				<div>
-					<h1>NCAA MBB Live Bracket</h1>
+					<h1>NCAA MBB Live Tournament Bracket</h1>
 				</div>
 			</div>
 			<div class="singlepost">
@@ -48,8 +48,8 @@
 					<p style="font-size:10px"><cite>Image via ncaa.com</cite></p>
 					<h1>NCAA Men's Basketball Live Tournament Bracket</h1>
 					<span>By Zach Hales, CouchGM</span>
-					<p><i>NCAA Men's Basketball Tournament Bracket</i></p>
-					<iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vRpjmSykFDrplP_1Av9O3yzSFkI3wIdhzqJ3IcXkb47rxfrbaQzycOop6SfMU8WDE0DLbe5kPkZeBvB/pubhtml?gid=1851603524&amp;single=true&amp;widget=true&amp;headers=false" height="1000" width="1000" align="center"></iframe>
+					<p><i>Live Tournament Bracket for the NCAA Men's Basketball Championship, with probabilities for every game as calculated by the CouchGM NCAA Men's Basketball Championship Predictor.</i></p>
+					<iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vRpjmSykFDrplP_1Av9O3yzSFkI3wIdhzqJ3IcXkb47rxfrbaQzycOop6SfMU8WDE0DLbe5kPkZeBvB/pubhtml?gid=1851603524&amp;single=true&amp;widget=true&amp;headers=false" height="750" width="750" align="center"></iframe>
 					<a href="/blog/index.html" class="load">back to blog</a>
 				</div>
 				<div class="sidebar">
